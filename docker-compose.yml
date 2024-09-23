@@ -3,8 +3,9 @@ services:
   backend:
     image: your-backend-image
     environment:
-      SPRING_DATASOURCE_URL: postgresql://postgres.overtfehoyuxlbnctbzx:[YOUR-PASSWORD]@aws-0-eu-central-2.pooler.supabase.com:6543/postgres
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: adminforTicketsystem
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://aws-0-eu-central-2.pooler.supabase.com:6543/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres.overtfehoyuxlbnctbzx
+      - SPRING_DATASOURCE_PASSWORD=adminforTicketsystem
+      - SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.postgresql.Driver
     ports:
       - "8080:8080"
