@@ -10,12 +10,18 @@ public class TicketEventListener {
     @EventListener
     public void handleTicketCreatedEvent(TicketCreatedEvent event) {
         Ticket ticket = event.getTicket();
-        System.out.println("New Ticket Created: " + ticket.getTitle());
+        System.out.println("New Ticket Created: " + ticket.getTitel());  // Titel anpassen
     }
 
     @EventListener
     public void handleTicketUpdatedEvent(TicketUpdatedEvent event) {
         Ticket ticket = event.getTicket();
-        System.out.println("Ticket Updated: " + ticket.getTitle());
+        System.out.println("Ticket Updated: " + ticket.getTitel());  // Titel anpassen
+    }
+
+    @EventListener
+    public void handleTicketSolvedEvent(TicketSolvedEvent event) {
+        Ticket ticket = event.getTicket();
+        System.out.println("Ticket Solved: " + ticket.getTitel());  // Titel anpassen
     }
 }

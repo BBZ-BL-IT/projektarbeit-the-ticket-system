@@ -4,20 +4,20 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
-public class Ticket {
+public class Benutzer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String titel;
-    private String beschreibung;
-    private boolean abgeschlossen;
+    private String vorname;
+    private String nachname;
 
-    @ManyToOne
-    @JoinColumn(name = "benutzer_id", nullable = false)
-    private Benutzer benutzer;
+    @OneToMany(mappedBy = "benutzer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ticket> tickets;
 }

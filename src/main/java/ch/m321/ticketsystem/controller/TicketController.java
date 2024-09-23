@@ -27,9 +27,9 @@ public class TicketController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public Ticket createTicket(@RequestBody Ticket ticket) {
-        return ticketService.createTicket(ticket);
+    @PostMapping("/benutzer/{benutzerId}")
+    public Ticket createTicket(@PathVariable Long benutzerId, @RequestBody Ticket ticket) {
+        return ticketService.createTicket(ticket, benutzerId);
     }
 
     @PutMapping("/{id}")
