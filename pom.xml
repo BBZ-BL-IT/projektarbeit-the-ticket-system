@@ -8,11 +8,11 @@
 		<version>3.3.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>ch.m321.ticketsystem</groupId>
-	<artifactId>Ticketsystem</artifactId>
+	<groupId>ch.m321</groupId>
+	<artifactId>ticketsystem</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Ticketsystem</name>
-	<description>Projektarbeit m321</description>
+	<name>ticketsystem</name>
+	<description>M321 Ticketsystem</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -39,12 +39,6 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-docker-compose</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

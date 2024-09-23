@@ -1,4 +1,4 @@
-package ch.m321.ticketsystem.Ticketsystem;
+package ch.m321.ticketsystem;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
