@@ -1,6 +1,20 @@
 <div class="body">
     <div class="toolbar">
-        <mat-icon class="toolbarItem">receipt</mat-icon>
+        <mat-icon class="toolbarItem ticketingIcon">receipt</mat-icon>
         <span class="toolbarItem">Ticketing</span>
+        <button class="toolbarItem addButton">
+        <mat-icon>add</mat-icon>
+    </button>
+    </div>
+
+    <div class="list">
+        <mat-card *ngFor="let ticket of tickets" class="listItem">
+            <mat-card-title>{{ticket.title}}
+                <div class="editIcon">
+                    <mat-icon>settings</mat-icon>
+                </div>
+            </mat-card-title>
+            <mat-card-content>{{ticket.description}}</mat-card-content>
+        </mat-card>
     </div>
 </div>

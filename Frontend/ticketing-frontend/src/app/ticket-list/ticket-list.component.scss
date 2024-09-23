@@ -13,7 +13,7 @@
     font-size: 40px;
 }
 
-mat-icon {
+mat-icon.ticketingIcon {
     height: 40px; 
     width: 40px; 
     font-size: 40px;
@@ -21,4 +21,43 @@ mat-icon {
 
 .toolbarItem {
     margin: auto 0px auto 10px;
+}
+
+.addButton {
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    border: none;
+    color: darkblue;
+    margin: auto 10px auto auto;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+}
+
+.listItem {
+    display: flex;
+    flex: 1 1 100%;
+    margin: 8px; 
+    padding: 16px; 
+    border: 1px solid rgb(200, 200, 200); 
+    border-radius: 8px;
+}
+
+mat-card-title {
+    display: flex;
+    flex-direction: row;
+}
+
+mat-card-content {
+    padding: 8px 0px 0px 0px !important;
+}
+
+.editIcon {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 100%;
+    justify-content: end;
 }
