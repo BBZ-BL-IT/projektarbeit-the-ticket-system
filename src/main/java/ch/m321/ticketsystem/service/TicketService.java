@@ -1,14 +1,17 @@
 package ch.m321.ticketsystem.service;
 
-import ch.m321.ticketsystem.model.Ticket;
+import ch.m321.ticketsystem.factory.TicketFactory;
 import ch.m321.ticketsystem.model.Benutzer;
-import ch.m321.ticketsystem.model.repo.TicketRepo;
+import ch.m321.ticketsystem.model.Ticket;
 import ch.m321.ticketsystem.model.repo.BenutzerRepo;
-import ch.m321.ticketsystem.events.TicketEventPublisher;
+import ch.m321.ticketsystem.model.repo.TicketRepo;
+import ch.m321.ticketsystem.dto.TicketDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TicketService {
@@ -19,43 +22,33 @@ public class TicketService {
     @Autowired
     private BenutzerRepo benutzerRepository;
 
-    @Autowired
-    private TicketEventPublisher ticketEventPublisher;
+    private TicketFactory ticketFactory;
 
-    public Ticket createTicket(Ticket ticket, Long benutzerId) {
-        Benutzer benutzer = benutzerRepository.findById(benutzerId)
-                .orElseThrow(() -> new RuntimeException("Benutzer nicht gefunden"));
+    public TicketDTO createTicket(TicketDTO ticketDTO) {
+        Optional<Benutzer> benutzerOptional = benutzerRepository.findById(ticketDTO.getBenutzerId());
+        if (benutzerOptional.isEmpty()) {
+            throw new RuntimeException("Benutzer nicht gefunden");
+        }
 
-        ticket.setBenutzer(benutzer);
-        ticket.setAbgeschlossen(true);
+        Benutzer benutzer = benutzerOptional.get();
 
+        Ticket ticket = TicketFactory.createTicket(ticketDTO, benutzer);
         Ticket savedTicket = ticketRepository.save(ticket);
-        ticketEventPublisher.publishTicketCreatedEvent(savedTicket);
 
-        return savedTicket;
+        return convertToDTO(savedTicket);
     }
 
-    public Ticket updateTicket(Long id, Ticket updatedTicket) {
+    public TicketDTO updateTicket(Long id, TicketDTO updatedTicketDTO) {
         return ticketRepository.findById(id).map(ticket -> {
-            ticket.setTitel(updatedTicket.getTitel());
-            ticket.setBeschreibung(updatedTicket.getBeschreibung());
-            ticket.setAbgeschlossen(updatedTicket.isAbgeschlossen());
-            Ticket savedTicket = ticketRepository.save(ticket);
+            Benutzer benutzer = benutzerRepository.findById(updatedTicketDTO.getBenutzerId())
+                    .orElseThrow(() -> new RuntimeException("Benutzer nicht gefunden"));
 
-            ticketEventPublisher.publishTicketUpdatedEvent(savedTicket);
+            Ticket updatedTicket = ticketFactory.createTicket(updatedTicketDTO, benutzer);
+            updatedTicket.setId(ticket.getId()); // Setze die ID des alten Tickets
 
-            return savedTicket;
-        }).orElseThrow(() -> new RuntimeException("Ticket nicht gefunden"));
-    }
+            Ticket savedTicket = ticketRepository.save(updatedTicket);
 
-    public Ticket solveTicket(Long id) {
-        return ticketRepository.findById(id).map(ticket -> {
-            ticket.setAbgeschlossen(false);
-            Ticket savedTicket = ticketRepository.save(ticket);
-
-            ticketEventPublisher.publishTicketSolvedEvent(savedTicket);
-
-            return savedTicket;
+            return convertToDTO(savedTicket);
         }).orElseThrow(() -> new RuntimeException("Ticket nicht gefunden"));
     }
 
@@ -63,11 +56,22 @@ public class TicketService {
         ticketRepository.deleteById(id);
     }
 
-    public List<Ticket> getAllTickets() {
-        return ticketRepository.findAll();
-    }
-
     public Optional<Ticket> getTicketById(Long id) {
         return ticketRepository.findById(id);
+    }
+
+    public List<TicketDTO> getAllTickets() {
+        List<Ticket> tickets = ticketRepository.findAll();
+        return tickets.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    private TicketDTO convertToDTO(Ticket ticket) {
+        TicketDTO dto = new TicketDTO();
+        dto.setId(ticket.getId());
+        dto.setTitel(ticket.getTitel());
+        dto.setBeschreibung(ticket.getBeschreibung());
+        dto.setAbgeschlossen(ticket.isAbgeschlossen());
+        dto.setBenutzerId(ticket.getBenutzer().getId());
+        return dto;
     }
 }

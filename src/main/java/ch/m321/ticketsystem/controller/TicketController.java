@@ -2,7 +2,9 @@ package ch.m321.ticketsystem.controller;
 
 import ch.m321.ticketsystem.model.Ticket;
 import ch.m321.ticketsystem.service.TicketService;
+import ch.m321.ticketsystem.dto.TicketDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +18,9 @@ public class TicketController {
     private TicketService ticketService;
 
     @GetMapping
-    public List<Ticket> getAllTickets() {
-        return ticketService.getAllTickets();
+    public ResponseEntity<List<TicketDTO>> getAllTickets() {
+        List<TicketDTO> tickets = ticketService.getAllTickets();
+        return new ResponseEntity<>(tickets, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -28,13 +31,16 @@ public class TicketController {
     }
 
     @PostMapping("/benutzer/{benutzerId}")
-    public Ticket createTicket(@PathVariable Long benutzerId, @RequestBody Ticket ticket) {
-        return ticketService.createTicket(ticket, benutzerId);
+    public ResponseEntity<TicketDTO> createTicket(@RequestBody TicketDTO ticketDTO) {
+        TicketDTO createdTicket = ticketService.createTicket(ticketDTO);
+        return new ResponseEntity<>(createdTicket, HttpStatus.CREATED);
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<Ticket> updateTicket(@PathVariable Long id, @RequestBody Ticket ticket) {
-        return ResponseEntity.ok(ticketService.updateTicket(id, ticket));
+    public ResponseEntity<TicketDTO> updateTicket(@PathVariable Long id, @RequestBody TicketDTO ticketDTO) {
+        TicketDTO updatedTicket = ticketService.updateTicket(id, ticketDTO);
+        return ResponseEntity.ok(updatedTicket);
     }
 
     @DeleteMapping("/{id}")
