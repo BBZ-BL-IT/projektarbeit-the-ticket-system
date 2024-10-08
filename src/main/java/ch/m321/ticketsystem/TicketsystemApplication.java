@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TicketsystemApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TicketsystemApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TicketsystemApplication.class, args);
+    }
 
 }
