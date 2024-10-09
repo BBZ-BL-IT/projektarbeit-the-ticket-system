@@ -1,11 +1,12 @@
 package ch.m321.ticketsystem.service;
 
+import ch.m321.ticketsystem.dto.TicketDTO;
 import ch.m321.ticketsystem.factory.TicketFactory;
 import ch.m321.ticketsystem.model.Benutzer;
 import ch.m321.ticketsystem.model.Ticket;
 import ch.m321.ticketsystem.model.repo.BenutzerRepo;
 import ch.m321.ticketsystem.model.repo.TicketRepo;
-import ch.m321.ticketsystem.dto.TicketDTO;
+import ch.m321.ticketsystem.publisher.TicketEventPublisherrr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,8 @@ public class TicketService {
     @Autowired
     private BenutzerRepo benutzerRepository;
 
-    private TicketFactory ticketFactory;
+    @Autowired
+    private TicketEventPublisherrr ticketEventPublisher;
 
     public TicketDTO createTicket(TicketDTO ticketDTO) {
         Optional<Benutzer> benutzerOptional = benutzerRepository.findById(ticketDTO.getBenutzerId());
@@ -31,11 +33,13 @@ public class TicketService {
         }
 
         Benutzer benutzer = benutzerOptional.get();
-
         Ticket ticket = TicketFactory.createTicket(ticketDTO, benutzer);
         Ticket savedTicket = ticketRepository.save(ticket);
 
-        return convertToDTO(savedTicket);
+        TicketDTO savedTicketDTO = convertToDTO(savedTicket);
+        ticketEventPublisher.publishTicketCreatedEvent(savedTicketDTO);
+
+        return savedTicketDTO;
     }
 
     public TicketDTO updateTicket(Long id, TicketDTO updatedTicketDTO) {
@@ -43,17 +47,26 @@ public class TicketService {
             Benutzer benutzer = benutzerRepository.findById(updatedTicketDTO.getBenutzerId())
                     .orElseThrow(() -> new RuntimeException("Benutzer nicht gefunden"));
 
-            Ticket updatedTicket = ticketFactory.createTicket(updatedTicketDTO, benutzer);
-            updatedTicket.setId(ticket.getId()); // Setze die ID des alten Tickets
+            Ticket updatedTicket = TicketFactory.createTicket(updatedTicketDTO, benutzer);
+            updatedTicket.setId(ticket.getId());
 
             Ticket savedTicket = ticketRepository.save(updatedTicket);
 
-            return convertToDTO(savedTicket);
+            TicketDTO savedTicketDTO = convertToDTO(savedTicket);
+            ticketEventPublisher.publishTicketUpdatedEvent(savedTicketDTO);
+
+            return savedTicketDTO;
         }).orElseThrow(() -> new RuntimeException("Ticket nicht gefunden"));
     }
 
     public void deleteTicket(Long id) {
-        ticketRepository.deleteById(id);
+        if (ticketRepository.existsById(id)) {
+            ticketRepository.deleteById(id);
+
+            ticketEventPublisher.publishTicketDeletedEvent(id);
+        } else {
+            throw new RuntimeException("Ticket nicht gefunden");
+        }
     }
 
     public Optional<Ticket> getTicketById(Long id) {
