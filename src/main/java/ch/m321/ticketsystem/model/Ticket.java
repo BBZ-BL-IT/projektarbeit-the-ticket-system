@@ -1,5 +1,6 @@
 package ch.m321.ticketsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,5 +20,6 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "benutzer_id", nullable = false)
+    @JsonIgnore
     private Benutzer benutzer;
 }
