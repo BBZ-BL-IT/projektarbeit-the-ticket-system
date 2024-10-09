@@ -1,20 +1,23 @@
 package ch.m321.ticketsystem.service;
-
+import ch.m321.ticketsystem.config.RabbitMQConfig;
+import ch.m321.ticketsystem.dto.TicketDTO;
 import ch.m321.ticketsystem.factory.TicketFactory;
 import ch.m321.ticketsystem.model.Benutzer;
 import ch.m321.ticketsystem.model.Ticket;
 import ch.m321.ticketsystem.model.repo.BenutzerRepo;
 import ch.m321.ticketsystem.model.repo.TicketRepo;
-import ch.m321.ticketsystem.dto.TicketDTO;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.Optional;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class TicketService {
+
+
+    private TicketFactory ticketFactory;
 
     @Autowired
     private TicketRepo ticketRepository;
@@ -22,7 +25,9 @@ public class TicketService {
     @Autowired
     private BenutzerRepo benutzerRepository;
 
-    private TicketFactory ticketFactory;
+    @Autowired
+    private RabbitTemplate rabbitTemplate; // Inject RabbitTemplate for sending messages
+
 
     public TicketDTO createTicket(TicketDTO ticketDTO) {
         Optional<Benutzer> benutzerOptional = benutzerRepository.findById(ticketDTO.getBenutzerId());
@@ -32,6 +37,7 @@ public class TicketService {
 
         Benutzer benutzer = benutzerOptional.get();
 
+        // Call the static method directly
         Ticket ticket = TicketFactory.createTicket(ticketDTO, benutzer);
         Ticket savedTicket = ticketRepository.save(ticket);
 
@@ -44,9 +50,12 @@ public class TicketService {
                     .orElseThrow(() -> new RuntimeException("Benutzer nicht gefunden"));
 
             Ticket updatedTicket = ticketFactory.createTicket(updatedTicketDTO, benutzer);
-            updatedTicket.setId(ticket.getId()); // Setze die ID des alten Tickets
+            updatedTicket.setId(ticket.getId()); // Set the ID of the existing ticket
 
             Ticket savedTicket = ticketRepository.save(updatedTicket);
+
+            // Publish the ticket update event to RabbitMQ
+            rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.ROUTING_KEY, savedTicket);
 
             return convertToDTO(savedTicket);
         }).orElseThrow(() -> new RuntimeException("Ticket nicht gefunden"));
@@ -54,6 +63,7 @@ public class TicketService {
 
     public void deleteTicket(Long id) {
         ticketRepository.deleteById(id);
+        // Optionally, publish a delete event to RabbitMQ if needed
     }
 
     public Optional<Ticket> getTicketById(Long id) {
