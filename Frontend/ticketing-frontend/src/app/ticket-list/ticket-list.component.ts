@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { Ticket } from '../models/ticket';
-import { NgFor } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 import { MatCard, MatCardModule } from '@angular/material/card';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-ticket-list',
   standalone: true,
-  imports: [MatIcon, NgFor, MatCardModule],
+  imports: [CommonModule, MatIcon, NgFor, MatCardModule, RouterLink],
   templateUrl: './ticket-list.component.html',
   styleUrl: './ticket-list.component.scss'
 })

@@ -1,0 +1,28 @@
+<div class="body">
+    <div class="toolbar">
+        <mat-icon class="toolbarItem ticketingIcon">receipt</mat-icon>
+        <span class="toolbarItem">Ticketing</span>
+        <button class="toolbarItem addButton">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+
+    <div class="form">
+
+        <mat-form-field>
+            <input matInput placeholder="Titel" [(ngModel)]="ticket!.title">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Beschreibung" [(ngModel)]="ticket!.description">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-select placeholder="Person" [(ngModel)]="ticket!.toPersonId">
+                @for (person of persons; track $index) {
+                <mat-option [value]="person.id">{{person.vorname}} {{person.nachname}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+    </div>
+</div>

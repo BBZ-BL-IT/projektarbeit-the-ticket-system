@@ -1,0 +1,40 @@
+.body {
+    display: flex; 
+    flex-direction: column;
+}
+
+.toolbar {
+    display: flex; 
+    flex-direction: row; 
+    height: 80px; 
+    width: 100%; 
+    background-color: darkblue; 
+    color: white; 
+    font-size: 40px;
+}
+
+mat-icon.ticketingIcon {
+    height: 40px; 
+    width: 40px; 
+    font-size: 40px;
+}
+
+.toolbarItem {
+    margin: auto 0px auto 10px;
+}
+
+.addButton {
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    border: none;
+    color: darkblue;
+    margin: auto 10px auto auto;
+}
+
+.form {
+    margin: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
