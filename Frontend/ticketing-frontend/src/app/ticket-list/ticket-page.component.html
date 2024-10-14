@@ -10,15 +10,15 @@
     <div class="form">
 
         <mat-form-field>
-            <input matInput placeholder="Titel" [(ngModel)]="ticket!.title">
+            <input matInput placeholder="Titel" [(ngModel)]="ticket!.titel">
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput placeholder="Beschreibung" [(ngModel)]="ticket!.description">
+            <input matInput placeholder="Beschreibung" [(ngModel)]="ticket!.beschreibung">
         </mat-form-field>
 
         <mat-form-field>
-            <mat-select placeholder="Person" [(ngModel)]="ticket!.toPersonId">
+            <mat-select placeholder="Person" [(ngModel)]="ticket!.benutzerId">
                 @for (person of persons; track $index) {
                 <mat-option [value]="person.id">{{person.vorname}} {{person.nachname}}</mat-option>
                 }

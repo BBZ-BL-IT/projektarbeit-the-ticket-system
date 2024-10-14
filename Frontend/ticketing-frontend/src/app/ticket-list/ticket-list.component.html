@@ -9,12 +9,12 @@
 
     <div class="list">
         <mat-card *ngFor="let ticket of tickets" class="listItem" [routerLink]="['/ticket', ticket.id]">
-            <mat-card-title>{{ticket.title}}
+            <mat-card-title>{{ticket.titel}}
                 <div class="editIcon">
                     <mat-icon>settings</mat-icon>
                 </div>
             </mat-card-title>
-            <mat-card-content>{{ticket.description}}</mat-card-content>
+            <mat-card-content>{{ticket.beschreibung}}</mat-card-content>
         </mat-card>
     </div>
 </div>

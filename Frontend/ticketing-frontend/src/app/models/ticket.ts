@@ -1,6 +1,7 @@
 export interface Ticket {
-    id?: string;
-    title?: string;
-    description?: string;
-    toPersonId?: string;
+    id?: number;
+    titel?: string;
+    beschreibung?: string;
+    abgeschlossen?: boolean;
+    benutzerId?: number;
 }
