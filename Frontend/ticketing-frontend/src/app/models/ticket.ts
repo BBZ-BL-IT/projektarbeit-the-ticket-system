@@ -3,5 +3,5 @@ export interface Ticket {
     titel?: string;
     beschreibung?: string;
     abgeschlossen?: boolean;
-    benutzerId?: number;
+    benutzer_id?: number;
 }
