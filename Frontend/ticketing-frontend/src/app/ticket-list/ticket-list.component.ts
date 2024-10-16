@@ -22,7 +22,7 @@ export class TicketListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.http.get("http://localhost:9090/api/tickets").subscribe((tickets: any) => {
+    this.http.get("/api/tickets").subscribe((tickets: any) => {
       this.tickets = tickets;
     })
   }
