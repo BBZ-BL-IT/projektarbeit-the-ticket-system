@@ -10,6 +10,7 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, NgModel, NgModelGroup } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { tick } from '@angular/core/testing';
 
 @Component({
   selector: 'app-ticket-page',
@@ -38,10 +39,13 @@ export class TicketPageComponent implements OnInit {
       if (ticketId) {
           this.ticketId = ticketId;
           await this.loadTicket();
+          if (this.ticket) {
+          }
       } else {
-          this.ticketId = Math.floor(Math.random() * 1000).toString();
+        this.ticket = {};
+          this.ticket.benutzerId = 1;
+          this.ticket.abgeschlossen = false;
           this.isCreate = true;
-          this.ticket = {};
       }
   });
   }
@@ -53,12 +57,15 @@ export class TicketPageComponent implements OnInit {
   }
 
   public storeTicket() {
-    if ( this.isCreate) {
-    this.http.put("/api/tickets/", this.ticket).subscribe((ticket: any) => {
+    if ( this.ticketId != null ) {
+      if (this.ticket) {
+      this.ticket.benutzerId = 1;
+      }
+    this.http.put("/api/tickets/" + this.ticketId, this.ticket).subscribe((ticket: any) => {
         
     });;
     } else {
-      this.http.put("/api/tickets/" + this.ticket?.id, this.ticket).subscribe((ticket: any) => {
+      this.http.post("/api/tickets/benutzer/1", this.ticket).subscribe((ticket: any) => {
 
       });
     }

@@ -22,9 +22,12 @@ export class TicketListComponent implements OnInit {
   }
 
   ngOnInit() {
+    setTimeout(() => {
     this.http.get("/api/tickets").subscribe((tickets: any) => {
       this.tickets = tickets;
     })
+  }, 500);
+
   }
 
 }
