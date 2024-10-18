@@ -2,7 +2,7 @@
     <div class="toolbar">
         <mat-icon class="toolbarItem ticketingIcon">receipt</mat-icon>
         <span class="toolbarItem">Ticketing</span>
-        <button class="toolbarItem addButton">
+        <button class="toolbarItem addButton" [routerLink]="['/ticket']">
         <mat-icon>add</mat-icon>
     </button>
     </div>
@@ -10,9 +10,6 @@
     <div class="list">
         <mat-card *ngFor="let ticket of tickets" class="listItem" [routerLink]="['/ticket', ticket.id]">
             <mat-card-title>{{ticket.titel}}
-                <div class="editIcon">
-                    <mat-icon>settings</mat-icon>
-                </div>
             </mat-card-title>
             <mat-card-content>{{ticket.beschreibung}}</mat-card-content>
         </mat-card>

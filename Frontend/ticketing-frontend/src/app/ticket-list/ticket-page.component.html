@@ -16,13 +16,17 @@
         <mat-form-field>
             <input matInput placeholder="Beschreibung" [(ngModel)]="ticket!.beschreibung">
         </mat-form-field>
+    </div>
 
-        <!--<mat-form-field>
-            <mat-select placeholder="Person" [(ngModel)]="ticket!.benutzerId">
-                @for (person of persons; track $index) {
-                <mat-option [value]="person.id">{{person.vorname}} {{person.nachname}}</mat-option>
-                }
-            </mat-select>
-        </mat-form-field>-->
+    <div class="buttons">
+        <button class="button" (click)="deleteTicket()">
+            <mat-icon>delete</mat-icon>
+        </button>
+        <button class="button" (click)="cancel()">
+            <mat-icon>cancel</mat-icon>
+        </button>
+        <button class="button" (click)="storeTicket()">
+            <mat-icon>check</mat-icon>
+        </button>
     </div>
 </div>
