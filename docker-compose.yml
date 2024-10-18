@@ -22,7 +22,7 @@ services:
       dockerfile: Dockerfile.nginx  # Der Name der Docker-Datei, überprüfe hier, ob der Name korrekt ist
     image: ticketing-frontend-nginx
     ports:
-      - "80:80"
+      - "4200:80"
     depends_on:
       - backend
 
