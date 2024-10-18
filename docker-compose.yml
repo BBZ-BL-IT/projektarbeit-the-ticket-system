@@ -1,6 +1,9 @@
 version: '3'
 services:
   backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: ticket-system-backend
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://aws-0-eu-central-2.pooler.supabase.com:6543/postgres
@@ -13,8 +16,18 @@ services:
     depends_on:
       - rabbitmq
 
+  frontend:
+    build:
+      context: ./Frontend/ticketing-frontend  # Vergewissere dich, dass dieser Pfad korrekt ist
+      dockerfile: Dockerfile.nginx  # Der Name der Docker-Datei, überprüfe hier, ob der Name korrekt ist
+    image: ticketing-frontend-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "5672:5672"  # RabbitMQ Port
-      - "15672:15672"  # RabbitMQ Management UI
+      - "5672:5672"
+      - "15672:15672"

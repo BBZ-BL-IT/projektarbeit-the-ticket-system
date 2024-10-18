@@ -1,0 +1,28 @@
+# Verwende den Node-Container, um das Angular-Projekt zu bauen
+FROM node:16-alpine AS build
+
+# Arbeitsverzeichnis festlegen
+WORKDIR /app
+
+# Kopiere die package.json und installiere Abhängigkeiten
+COPY package*.json ./
+RUN npm install
+
+# Kopiere den Rest des Codes und baue das Angular-Projekt
+COPY . .
+RUN npm run build --prod  # Erstelle den Produktions-Build
+
+# Verwende Nginx, um das gebaute Projekt auszuliefern
+FROM nginx:alpine
+
+# Entferne die Standard-Nginx-Seiten
+RUN rm -rf /usr/share/nginx/html/*
+
+# Kopiere den Build aus dem Node-Container in das Nginx-Verzeichnis
+COPY --from=build /app/dist/ticketing-frontend /usr/share/nginx/html
+
+# Exponiere den Standard-HTTP-Port von Nginx
+EXPOSE 80
+
+# Nginx starten
+CMD ["nginx", "-g", "daemon off;"]
